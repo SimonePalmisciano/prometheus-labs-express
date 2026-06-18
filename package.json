@@ -1,0 +1,19 @@
+{
+  "name": "prometheus-labs-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "watch": "node --env-file=.env --watch server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.33.3",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.22.5"
+  }
+}
