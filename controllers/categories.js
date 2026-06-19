@@ -16,7 +16,7 @@ async function index(request, response) {
         return response.status(200)
             .json({ result: results[0], error: null });
     } catch (error) {
-
+        return { result: null, error: 500 };
     }
 
     response.status(200)
