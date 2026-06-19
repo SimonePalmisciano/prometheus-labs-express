@@ -8,5 +8,7 @@ function validateNumber(number) {
     if (Number.isNaN(realNumber)) {
         return null;
     }
+
+    return realNumber;
 }
 export default validateNumber
