@@ -1,6 +1,7 @@
 import express from "express";
 import categoriesRouter from "./routers/categories.js";
 import powersRouter from "./routers/powers.js";
+import productsRouter from "./routers/products.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/categories", categoriesRouter);
 app.use("/powers", powersRouter);
+app.use("/products", productsRouter);
 
 app.get("/", (request, response) => {
     response.json({
@@ -30,4 +32,4 @@ app.listen(port, (error) => {
         return;
     }
     console.log('server in ascolto a questa porta: ', port);
-})
+});
