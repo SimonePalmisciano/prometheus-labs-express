@@ -13,6 +13,7 @@
   "packageManager": "pnpm@10.33.3",
   "type": "module",
   "dependencies": {
+    "cors": "^2.8.6",
     "express": "^5.2.1",
     "mysql2": "^3.22.5"
   }
