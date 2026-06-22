@@ -25,20 +25,31 @@ from categories c;
 const querySelectCategoriesBySlug = `
 select c.id, c.name, c.slug
 from categories c
-where slug = ? `;
+where slug = ?;
+`;
 
 
 /*======== POWERS ========*/
 
+const querySelectAllPowers = `
+select p.id, p.name, p.power_type as powerType
+from powers p;
+`;
 
-
+const querySelectPowerById = `
+select p.id, p.name, p.power_type as powerType
+from powers p
+where p.id = ? ;
+`;
 
 
 const queries = {
     querySelectAllProducts,
     querySelectProductBySlug,
     querySelectAllCategories,
-    querySelectCategoriesBySlug
+    querySelectCategoriesBySlug,
+    querySelectAllPowers,
+    querySelectPowerById
 };
 
 export default queries;
