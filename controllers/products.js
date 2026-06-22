@@ -5,7 +5,7 @@ import queries from "../utils_js/queries/queries.js";
 async function index(request, response) {
     // per ora la query è una stringa di placeholder, da fixare quando abbiamo real db connection
     try {
-        const [rows] = await connection.execute(querySelectAllProducts);
+        const [rows] = await connection.execute(queries.querySelectAllProducts);
         if (!rows || rows.length === 0) {
             return response.status(404)
                 .json({
@@ -30,18 +30,18 @@ async function index(request, response) {
 }
 
 async function show(request, response) {
-    const { slug: productSlug } = request.params; // valutare con Simo se spostare in un middleware validateSlug
-    const realSlug = validateSlug(productSlug);
-    console.log('lo slug del prodotto:', realSlug); // riga per check funzionamento da console
+    const slug = request.productSlug;
+    console.log('lo slug del prodotto:', slug); // riga per check funzionamento da console
 
     try {
-        const [ rows ] = await connection.execute(querySelectProductBySlug, [realSlug]);
+
+        const [ rows ] = await connection.execute(queries.querySelectProductBySlug, [realSlug]);
 
         if (!rows || rows.length === 0) {
             return response.status(404)
                     .json({
                         results: null,
-                        error: `Il database non presenta alcun prodotto con slug ${realSlug}!`
+                        error: `Il database non presenta alcun prodotto con slug ${slug}!`
                     });
         }
 
@@ -55,7 +55,7 @@ async function show(request, response) {
         return response.status(500)
                 .json({
                     results: null,
-                    error: `errore interno del server nel recuperare il prodotto con slug ${realSlug}`
+                    error: `errore interno del server nel recuperare il prodotto con slug ${slug}`
                 });
     }
 }
