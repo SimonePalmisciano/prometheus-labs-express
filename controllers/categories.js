@@ -31,8 +31,7 @@ async function index(request, response) {
 }
 
 async function show(request, response) {
-    const { categorySlug } = request.params;
-    const validatedCatSlug = validateSlug(categorySlug);
+    const slug = request.categorySlug;
     console.log("slugcat val: ", validatedCatSlug);
     
     const querySelect = `
@@ -43,7 +42,7 @@ async function show(request, response) {
         `;
 
     try {
-        const [results] = await connection.execute(querySelect, [categorySlug]);
+        const [results] = await connection.execute(querySelect, [slug]);
 
         if (results.length === 0) {
             return response.status(404)
