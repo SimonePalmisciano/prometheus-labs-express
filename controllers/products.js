@@ -35,8 +35,8 @@ async function show(request, response) {
 
     try {
 
-        const [ rows ] = await connection.execute(queries.querySelectProductBySlug, [realSlug]);
-
+        const [ rows ] = await connection.execute(queries.querySelectProductBySlug, [slug]);
+        
         if (!rows || rows.length === 0) {
             return response.status(404)
                     .json({
