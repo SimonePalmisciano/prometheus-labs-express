@@ -4,6 +4,7 @@ import powersRouter from "./routers/powers.js";
 import productsRouter from "./routers/products.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import ordersRouter from "./routers/orders.js";
 
 const port = process.env.SERVER_PORT || 3000;
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/categories", categoriesRouter);
 app.use("/powers", powersRouter);
 app.use("/products", productsRouter);
+app.use("/orders", ordersRouter)
 
 app.get("/", (request, response) => {
     response.json({
