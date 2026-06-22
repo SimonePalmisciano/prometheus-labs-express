@@ -65,7 +65,7 @@ ALTER TABLE
 CREATE TABLE `powers`(
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL,
-    `power_type` ENUM('physical', 'psychic') NULL
+    `power_type` VARCHAR(255) NOT NULL
 );
 ALTER TABLE
     `order_products` ADD CONSTRAINT `order_products_product_id_foreign` FOREIGN KEY(`product_id`) REFERENCES `products`(`id`);
