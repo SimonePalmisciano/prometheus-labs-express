@@ -66,8 +66,37 @@ async function show(request, response) {
 
 }
 
+async function showLatestFive(request, response) {
+
+    try {
+        const [rows] = await connection.execute(queries.querySelectLatestFiveProducts);
+        const groupedRows = utils.groupBy(rows);
+    
+        if (!rows || rows.length === 0) {
+            return response.status(404)
+                .json({
+                    results: null,
+                    error: 'nessun prodotto trovato a database!'
+                });
+        }
+        return response.status(200)
+            .json({
+                results: groupedRows,
+                error: null
+            });
+    } catch (error) {
+        console.error('errore durante il recupero dei prodotti:', error);
+
+        return response.status(500)
+            .json({
+                results: null,
+                error: 'errore interno del server nel recuperare i prodotti'
+            });
+    }
+}
+
 const productsController = {
-    index, show
+    index, show, showLatestFive
 };
 
 export default productsController;

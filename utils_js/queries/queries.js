@@ -20,6 +20,19 @@ join powers po on p.power_id = po.id
 where p.slug = ?;
 `;
 
+
+// seleziona gli ultimi 5 prodotti per data di release (latest 5)
+
+const querySelectLatestFiveProducts = `
+select p.id, p.name, p.slug, po.name as power, po.power_type, p.short_description as shortDescription, p.marketing_description as mktgDescription, c.name as category, p.price_full as price, p.ingredients, p.created_at as createdAt, p.updated_at as updatedAt,
+from products p
+join category_product cp on p.id = cp.product_id
+join categories c on c.id = cp.category_id
+join powers po on p.power_id = po.id
+order by p.created_at DESC
+limit 5
+`;
+
 /*======== CATEGORIES ========*/
 
 const querySelectAllCategories = `
@@ -81,6 +94,7 @@ const queries = {
   // Products
   querySelectAllProducts,
   querySelectProductBySlug,
+  querySelectLatestFiveProducts,
 
   // Categories
   querySelectAllCategories,
