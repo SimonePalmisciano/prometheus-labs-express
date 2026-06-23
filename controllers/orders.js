@@ -49,7 +49,11 @@ const store = async (req, res) => {
         guest_email,
         guest_name,
         guest_surname,
+        phone_number,
         city,
+        address,
+        house_number,
+        postal_code,
         country,
         total_amount,
         items
@@ -62,9 +66,9 @@ const store = async (req, res) => {
 
         const [orderResult] = await conn.execute(
             `INSERT INTO orders 
-            (guest_email, guest_name, guest_surname, city, country, total_amount)
-            VALUES (?, ?, ?, ?, ?, ?)`,
-            [guest_email, guest_name, guest_surname, city, country, total_amount]
+            (guest_email, guest_name, guest_surname, phone_number, city, address, house_number, postal_code, country, total_amount)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [guest_email, guest_name, guest_surname, phone_number, city, address, house_number, postal_code, country, total_amount]
         );
 
         const orderId = orderResult.insertId;
@@ -94,7 +98,7 @@ const store = async (req, res) => {
 const destroy = async (req, res) => {
     const { orderId } = req.params;
 
-    const conn = await connection.getConnection();
+    const conn = connection;
 
     try {
         await conn.beginTransaction();
