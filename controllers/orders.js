@@ -21,12 +21,12 @@ const index = async (req, res) => {
 const show = async (req, res) => {
     const { orderId } = req.params;
     console.log("id ordine: ", orderId);
-    
+
 
     try {
         const [[order]] = await connection.execute(queryGetOrderById, [orderId]);
         console.log(order);
-        
+
 
         if (!order) {
             return res.status(404).json({ error: "Ordine non trovato" });
@@ -55,7 +55,6 @@ const store = async (req, res) => {
         house_number,
         postal_code,
         country,
-        total_amount,
         items
     } = req.body;
 
@@ -64,34 +63,102 @@ const store = async (req, res) => {
     try {
         await conn.beginTransaction();
 
+        const validatedItems = [];
+        let total_amount = 0;
+
+        for (const item of items) {
+            const slug = item.slug.trim();
+            const quantity = Number(item.quantity);
+
+            const [products] = await conn.execute(
+                `SELECT id, slug, price_full
+                FROM products
+                WHERE slug = ?
+                LIMIT 1`,
+                [slug]
+            );
+
+            if (products.length === 0) {
+                const error = new Error(`Prodotto con slug "${slug}" non trovato`);
+                error.statusCode = 404;
+                throw error;
+            }
+
+            const product = products[0];
+            const price_at_purchase = Number(product.price_full);
+
+            total_amount += price_at_purchase * quantity;
+
+            validatedItems.push({
+                product_id: product.id,
+                slug: product.slug,
+                quantity,
+                price_at_purchase
+            });
+        }
+
+        total_amount = Number(total_amount.toFixed(2));
+
         const [orderResult] = await conn.execute(
-            `INSERT INTO orders 
-            (guest_email, guest_name, guest_surname, phone_number, city, address, house_number, postal_code, country, total_amount)
+            `INSERT INTO orders
+            (
+                guest_email,
+                guest_name,
+                guest_surname,
+                phone_number,
+                city,
+                address,
+                house_number,
+                postal_code,
+                country,
+                total_amount
+            )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [guest_email, guest_name, guest_surname, phone_number, city, address, house_number, postal_code, country, total_amount]
+            [
+                guest_email,
+                guest_name,
+                guest_surname,
+                phone_number,
+                city,
+                address,
+                house_number,
+                postal_code,
+                country,
+                total_amount
+            ]
         );
 
         const orderId = orderResult.insertId;
 
-        for (const item of items) {
+        for (const item of validatedItems) {
             await conn.execute(
-                `INSERT INTO order_products 
+                `INSERT INTO order_products
                 (order_id, product_id, quantity, price_at_purchase)
                 VALUES (?, ?, ?, ?)`,
-                [orderId, item.product_id, item.quantity, item.price_at_purchase]
+                [
+                    orderId,
+                    item.product_id,
+                    item.quantity,
+                    item.price_at_purchase
+                ]
             );
         }
 
         await conn.commit();
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Ordine creato con successo",
-            order_id: orderId
+            order_id: orderId,
+            total_amount
         });
     } catch (error) {
         await conn.rollback();
+
         console.error("Errore nella creazione dell'ordine:", error);
-        res.status(500).json({ error: "Errore nel server" });
+
+        return res.status(error.statusCode || 500).json({
+            error: error.message || "Errore nel server"
+        });
     }
 };
 
