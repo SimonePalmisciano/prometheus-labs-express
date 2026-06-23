@@ -1,11 +1,14 @@
 import connection from "../data/db.js";
 import { validateSlug } from "../utils_js/validation/validateSlug.js";
 import queries from "../utils_js/queries/queries.js";
+import utils from "../utils_js/utils.js";
 
 async function index(request, response) {
-    // per ora la query è una stringa di placeholder, da fixare quando abbiamo real db connection
+
     try {
         const [rows] = await connection.execute(queries.querySelectAllProducts);
+        const groupedRows = utils.groupBy(rows);
+    
         if (!rows || rows.length === 0) {
             return response.status(404)
                 .json({
@@ -15,7 +18,7 @@ async function index(request, response) {
         }
         return response.status(200)
             .json({
-                results: rows,
+                results: groupedRows,
                 error: null
             });
     } catch (error) {
@@ -35,29 +38,32 @@ async function show(request, response) {
 
     try {
 
-        const [ rows ] = await connection.execute(queries.querySelectProductBySlug, [slug]);
-        
+        const [rows] = await connection.execute(queries.querySelectProductBySlug, [slug]);
+        const groupedRows = utils.groupBy(rows);
+    
+
         if (!rows || rows.length === 0) {
             return response.status(404)
-                    .json({
-                        results: null,
-                        error: `Il database non presenta alcun prodotto con slug ${slug}!`
-                    });
+                .json({
+                    results: null,
+                    error: `Il database non presenta alcun prodotto con slug ${slug}!`
+                });
         }
 
         return response.status(200)
-                .json({
-                    results: rows,
-                    error: null
-                });
+            .json({
+                results: groupedRows,
+                error: null
+            });
 
     } catch (error) {
         return response.status(500)
-                .json({
-                    results: null,
-                    error: `errore interno del server nel recuperare il prodotto con slug ${slug}`
-                });
+            .json({
+                results: null,
+                error: `errore interno del server nel recuperare il prodotto con slug ${slug}`
+            });
     }
+
 }
 
 const productsController = {
