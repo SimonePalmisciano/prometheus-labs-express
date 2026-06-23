@@ -1,17 +1,22 @@
 /*======== PRODUCTS ========*/
 
 const querySelectAllProducts = `
-select p.id, p.name, p.slug, p.short_description as shortDescription, p.marketing_description as mktgDescription, 
-  p.price_full as price, p.ingredients, p.created_at as createdAt, p.updated_at as updatedAt,
+select p.id, p.name, p.slug, po.name as power, po.power_type, p.short_description as shortDescription, p.marketing_description as mktgDescription, c.name as category, p.price_full as price, p.ingredients, p.created_at as createdAt, p.updated_at as updatedAt,
     p.image_main_url as imgMain, p.image_lifestyle as imgLifestyle, p.image_ksp as imgKsp
 from products p
+join category_product cp on p.id = cp.product_id
+join categories c on c.id = cp.category_id
+join powers po on p.power_id = po.id
+
 `;
 
 const querySelectProductBySlug = `
-select p.id, p.name, p.slug, p.short_description as shortDescription,
-  p.marketing_description as mktgDescription, p.price_full as price, 
-    p.ingredients, p.created_at as createdAt, p.updated_at as updatedAt, p.image_main_url as imgMain, p.image_lifestyle as imgLifestyle, p.image_ksp as imgKsp
+select p.id, p.name, p.slug, po.name as power, po.power_type, p.short_description as shortDescription, p.marketing_description as mktgDescription, c.name as category, p.price_full as price, p.ingredients, p.created_at as createdAt, p.updated_at as updatedAt,
+    p.image_main_url as imgMain, p.image_lifestyle as imgLifestyle, p.image_ksp as imgKsp
 from products p
+join category_product cp on p.id = cp.product_id
+join categories c on c.id = cp.category_id
+join powers po on p.power_id = po.id
 where p.slug = ?;
 `;
 
