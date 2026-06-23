@@ -66,10 +66,10 @@ async function show(request, response) {
 
 }
 
-async function showLatestFive(request, response) {
+async function showLatestTen(request, response) {
 
     try {
-        const [rows] = await connection.execute(queries.querySelectLatestFiveProducts);
+        const [rows] = await connection.execute(queries.querySelectLatestTenProducts);
         const groupedRows = utils.groupBy(rows);
     
         if (!rows || rows.length === 0) {
@@ -96,7 +96,7 @@ async function showLatestFive(request, response) {
 }
 
 const productsController = {
-    index, show, showLatestFive
+    index, show, showLatestTen
 };
 
 export default productsController;
