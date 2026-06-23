@@ -31,7 +31,7 @@ dalla groupBy, abbiamo abbastanza rows per popolare 3-5 prodotti nella
 selection in home */
 
 const querySelectLatestTenProducts = `
-select p.id, p.name, p.slug, po.name as power, po.power_type, p.short_description as shortDescription, p.marketing_description as mktgDescription, c.name as category, p.price_full as price, p.ingredients, p.created_at as createdAt, p.updated_at as updatedAt
+select p.id, p.name, p.slug, po.name as power, po.power_type, p.short_description as shortDescription, p.marketing_description as mktgDescription, c.name as category, p.price_full as price, p.ingredients, p.created_at as createdAt, p.updated_at as updatedAt, p.image_main_url as imgMain
 from products p
 join category_product cp on p.id = cp.product_id
 join categories c on c.id = cp.category_id
