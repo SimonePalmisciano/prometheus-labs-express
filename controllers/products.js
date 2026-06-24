@@ -180,7 +180,7 @@ async function showProductsFiltererdByPowerType(request, response) {
                 });
         }
         return response.status(200)
-            .json({         SWAZ
+            .json({
                 results: groupedRows,
                 error: null
             });
