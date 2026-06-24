@@ -6,6 +6,7 @@ import productsRouter from "./routers/products.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import ordersRouter from "./routers/orders.js";
+import validateOrders from "./middlewares/validateOrders.js";
 
 const port = process.env.SERVER_PORT || 3000;
 
@@ -19,11 +20,11 @@ app.use(express.json());
 app.use("/categories", categoriesRouter);
 app.use("/powers", powersRouter);
 app.use("/products", productsRouter);
-app.use("/orders", ordersRouter)
+app.use("/orders", [validateOrders, ordersRouter]);
 
 app.get("/", (request, response) => {
     response.json({
-        message: 'il server funziona correttamente'
+        message: 'server correctly working'
     })
 });
 
@@ -36,5 +37,5 @@ app.listen(port, (error) => {
         console.error(error.message);
         return;
     }
-    console.log('server in ascolto a questa porta: ', port);
+    console.log('server listening to port: ', port);
 });

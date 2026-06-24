@@ -14,14 +14,14 @@ function validateOrders(request, response, next) {
 
     if (!request.body || typeof request.body !== "object" || Array.isArray(request.body)) {
         return response.status(400).json({
-            error: "Request body non valido",
+            error: "Request body is not valid",
             result: null
         });
     }
 
     if (typeof guest_email !== "string" || guest_email.trim().length === 0) {
         return response.status(400).json({
-            error: "Email obbligatoria",
+            error: "Email required: add a valid email address",
             result: null
         });
     }
@@ -29,28 +29,28 @@ function validateOrders(request, response, next) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(guest_email.trim())) {
         return response.status(400).json({
-            error: "Email non valida",
+            error: "Email not valid: add a valid email address",
             result: null
         });
     }
 
     if (typeof guest_name !== "string" || guest_name.trim().length === 0) {
         return response.status(400).json({
-            error: "Nome obbligatorio",
+            error: "Guest Name required: add a valid name",
             result: null
         });
     }
 
     if (typeof guest_surname !== "string" || guest_surname.trim().length === 0) {
         return response.status(400).json({
-            error: "Cognome obbligatorio",
+            error: "Guest Surname required: add a valid surname",
             result: null
         });
     }
 
     if (typeof phone_number !== "string" || phone_number.trim().length === 0) {
         return response.status(400).json({
-            error: "Numero di telefono obbligatorio",
+            error: "Phone number is required: add a valid phone number",
             result: null
         });
     }
@@ -65,56 +65,56 @@ function validateOrders(request, response, next) {
 
     if (typeof city !== "string" || city.trim().length === 0) {
         return response.status(400).json({
-            error: "Città obbligatoria",
+            error: "City required: add a valid City",
             result: null
         });
     }
 
     if (typeof address !== "string" || address.trim().length === 0) {
         return response.status(400).json({
-            error: "Indirizzo obbligatorio",
+            error: "Address is quired: add a valid address",
             result: null
         });
     }
 
     if (typeof house_number !== "string" || house_number.trim().length === 0) {
         return response.status(400).json({
-            error: "Numero civico obbligatorio",
+            error: "House number required: add a valid house number",
             result: null
         });
     }
 
     if (typeof postal_code !== "string" || postal_code.trim().length === 0) {
         return response.status(400).json({
-            error: "CAP obbligatorio",
+            error: "Postal Code is required: add a valid postal code",
             result: null
         });
     }
 
     if (postal_code.trim().length < 3 || postal_code.trim().length > 12) {
         return response.status(400).json({
-            error: "CAP non valido",
+            error: "Postal Code not valid: add a valid postal code",
             result: null
         });
     }
 
     if (typeof country !== "string" || country.trim().length === 0) {
         return response.status(400).json({
-            error: "Paese obbligatorio",
+            error: "Country field is required: add a valid Country",
             result: null
         });
     }
 
     if (!Array.isArray(items)) {
         return response.status(400).json({
-            error: "items deve essere un array",
+            error: "items must be an array",
             result: null
         });
     }
 
     if (items.length === 0) {
         return response.status(400).json({
-            error: "L'ordine deve contenere almeno un prodotto",
+            error: "Order must include at least 1 product!",
             result: null
         });
     }
@@ -124,14 +124,14 @@ function validateOrders(request, response, next) {
 
         if (!item || typeof item !== "object" || Array.isArray(item)) {
             return response.status(400).json({
-                error: `items[${i}] non è valido`,
+                error: `${item} not valid`,
                 result: null
             });
         }
 
         if (typeof item.slug !== "string" || item.slug.trim().length === 0) {
             return response.status(400).json({
-                error: `items[${i}].slug obbligatorio`,
+                error: `${item.slug} is required`,
                 result: null
             });
         }
@@ -142,7 +142,7 @@ function validateOrders(request, response, next) {
             Number(item.quantity) <= 0
         ) {
             return response.status(400).json({
-                error: `items[${i}].quantity non valida`,
+                error: `${item.quantity} not valid`,
                 result: null
             });
         }

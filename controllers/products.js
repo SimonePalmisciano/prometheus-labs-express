@@ -13,7 +13,7 @@ async function index(request, response) {
             return response.status(404)
                 .json({
                     results: null,
-                    error: 'nessun prodotto trovato a database!'
+                    error: 'No product available in the database'
                 });
         }
         return response.status(200)
@@ -27,7 +27,7 @@ async function index(request, response) {
         return response.status(500)
             .json({
                 results: null,
-                error: 'errore interno del server nel recuperare i prodotti'
+                error: 'Internal Server Error when looking for Products'
             });
     }
 }
@@ -46,7 +46,7 @@ async function show(request, response) {
             return response.status(404)
                 .json({
                     results: null,
-                    error: `Il database non presenta alcun prodotto con slug ${slug}!`
+                    error: `No Product in the database with slug "${slug}" available in the database`
                 });
         }
 
@@ -60,7 +60,7 @@ async function show(request, response) {
         return response.status(500)
             .json({
                 results: null,
-                error: `errore interno del server nel recuperare il prodotto con slug ${slug}`
+                error: `Internal Server Error when looking for product with slug  "${slug}"`
             });
     }
 
@@ -76,7 +76,7 @@ async function showLatestTen(request, response) {
             return response.status(404)
                 .json({
                     results: null,
-                    error: 'nessun prodotto trovato a database!'
+                    error: 'No Product available in the database'
                 });
         }
         return response.status(200)
@@ -90,7 +90,7 @@ async function showLatestTen(request, response) {
         return response.status(500)
             .json({
                 results: null,
-                error: 'errore interno del server nel recuperare i prodotti'
+                error: 'Internal Server Error when looking for Products'
             });
     }
 }
@@ -105,7 +105,7 @@ async function showBestsellers(request, response) {
             return response.status(404)
                 .json({
                     results: null,
-                    error: 'nessun prodotto trovato a database!'
+                    error: 'No Product available in the database'
                 });
         }
         return response.status(200)
@@ -119,7 +119,7 @@ async function showBestsellers(request, response) {
         return response.status(500)
             .json({
                 results: null,
-                error: 'errore interno del server nel recuperare i prodotti'
+                error: 'Internal Server Error when looking for Products'
             });
     }
 }

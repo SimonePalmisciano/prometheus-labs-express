@@ -10,7 +10,7 @@ async function index(request, response) {
             return response.status(404)
                 .json({
                     result: null,
-                    error: 404
+                    error: `No Power found in the database`
                 });
         }
         return response.status(200)
@@ -22,7 +22,7 @@ async function index(request, response) {
         return response.status(500)
             .json({
                 result: null,
-                error: 500
+                error: 'Internal Server Error when looking for Powers'
             });
     }
 }
@@ -39,7 +39,7 @@ async function show(request, response) {
             return response.status(404)
                 .json({
                     result: null,
-                    error: 404
+                    error: `Power with ID ${powerId} not found`
                 });
         }
         return response.status(200)
@@ -51,7 +51,7 @@ async function show(request, response) {
         return response.status(500)
             .json({
                 result: null,
-                error: 500
+                error: `Internal Server Error when looking fot Power with ID ${powerId}`
             });
     }
 }

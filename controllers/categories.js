@@ -10,7 +10,7 @@ async function index(request, response) {
             return response.status(404)
                 .json({
                     result: null,
-                    error: 404
+                    error: 'Categories not found'
                 });
         }
         return response.status(200)
@@ -22,7 +22,7 @@ async function index(request, response) {
         return response.status(500)
             .json({
                 result: null,
-                error: 500
+                error: 'Internal Server Errors when fetching Categories'
             });
     }
 }
@@ -39,7 +39,7 @@ async function show(request, response) {
             return response.status(404)
                 .json({
                     result: null,
-                    error: 404
+                    error: `Category with slug "${slug} not found`
                 });
         }
         return response.status(200)
@@ -51,7 +51,7 @@ async function show(request, response) {
         return response.status(500)
             .json({
                 result: null,
-                error: 500
+                error: `Internal Server Error when looking for Category with slug "${slug}`
             });
     }
 }

@@ -9,7 +9,7 @@ export async function checkProductSlugExists(request, response, next) {
 
     if (validatedSlug === null) {
         return response.status(400).json({
-            error: "Slug non valida",
+            error: `Slug "${slug}" not valid`,
             result: null,
         });
     }
@@ -19,7 +19,7 @@ export async function checkProductSlugExists(request, response, next) {
         const [rows] = await connection.query(sql, [validatedSlug]);
         if (rows.length === 0) {
             return response.status(404).json({
-                error: "Prodotto non trovato",
+                error: `Product with sug "${slug}" not found`,
                 result: null
             });
         }
@@ -30,7 +30,7 @@ export async function checkProductSlugExists(request, response, next) {
         return next();
     } catch (error) {
         return response.status(500).json({
-            error: "C'è stato un problema nel recuperare i dati dal db",
+            error: `Internal Server Error when checking product slug: "${slug}"`,
             result: null
         });
     }
