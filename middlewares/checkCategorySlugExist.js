@@ -10,7 +10,7 @@ export async function checkCategorySlugExists(request, response, next) {
 
     if (validatedCatSlug === null) {
         return response.status(400).json({
-            error: "Slug non valida",
+            error: "Slug is not valid",
             result: null
         });
     }
@@ -18,13 +18,13 @@ export async function checkCategorySlugExists(request, response, next) {
 
     if (error === 404) {
         return response.status(404).json({
-            error: "Category non trovata",
+            error: "Category not found",
             result: null
         });
     }
     if (error === 500) {
         return response.status(500).json({
-            error: "C'è stato un problema nel recuperare i dati dal db",
+            error: "Internal Server Error when checking category slug",
             result: null
         });
     }
