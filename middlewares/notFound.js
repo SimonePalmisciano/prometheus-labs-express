@@ -1,7 +1,7 @@
 function notFound(request, response, next) {
     response.status(404)
             .json({
-                error: 'not found',
+                error: 'What you were looking for... sorry, not found!',
                 results: null
             });
 };
