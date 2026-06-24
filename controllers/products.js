@@ -157,8 +157,8 @@ async function showProductsFiltererdByCatName(request, response) {
 async function showProductsFiltererdByPowerType(request, response) {
 
     try {
-        const  { powerType } = request.params;
-        const [rows] = await connection.execute(queries.querySelectProductByPowerType, [powerType]);
+        const  { power } = request.params;
+        const [rows] = await connection.execute(queries.querySelectProductByPowerType, [power]);
         const groupedRows = utils.groupBy(rows);
     
         if (!rows || rows.length === 0) {
