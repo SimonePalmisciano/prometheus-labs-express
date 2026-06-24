@@ -14,7 +14,7 @@ const index = async (req, res) => {
         res.json(orders);
     } catch (error) {
         console.error("Errore nel recupero degli ordini:", error);
-        res.status(500).json({ error: "Errore nel server" });
+        res.status(500).json({ error: "Internal Server Error while getting order list" });
     }
 };
 
@@ -29,7 +29,7 @@ const show = async (req, res) => {
 
 
         if (!order) {
-            return res.status(404).json({ error: "Ordine non trovato" });
+            return res.status(404).json({ error: `order wtih ID ${orderId} not found`});
         }
 
         const [items] = await connection.execute(queryGetOrderItems, [orderId]);
@@ -39,8 +39,8 @@ const show = async (req, res) => {
             items
         });
     } catch (error) {
-        console.error("Errore nel recupero dell'ordine:", error.message);
-        res.status(500).json({ error: "Errore nel server" });
+        console.error(`Internal Server Error while looking for order witrh ID ${orderId}`, error.message);
+        res.status(500).json({ error: `Internal Server Error while looking with the order wtih ID ${orderId}` });
     }
 };
 
@@ -79,7 +79,7 @@ const store = async (req, res) => {
             );
 
             if (products.length === 0) {
-                const error = new Error(`Prodotto con slug "${slug}" non trovato`);
+                const error = new Error(`Product with slug "${slug}" not found`);
                 error.statusCode = 404;
                 throw error;
             }
@@ -157,7 +157,7 @@ const store = async (req, res) => {
         console.error("Errore nella creazione dell'ordine:", error);
 
         return res.status(error.statusCode || 500).json({
-            error: error.message || "Errore nel server"
+            error: error.message || "Internal Server Error while getting the order"
         });
     }
 };
@@ -176,14 +176,14 @@ const destroy = async (req, res) => {
         await conn.commit();
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Ordine non trovato" });
+            return res.status(404).json({ error: `order with ID ${orderId} not found` });
         }
 
         res.json({ message: "Ordine eliminato con successo" });
     } catch (error) {
         await conn.rollback();
         console.error("Errore nell'eliminazione dell'ordine:", error);
-        res.status(500).json({ error: "Errore nel server" });
+        res.status(500).json({ error: `Internal Server Error while deleting order with ID ${orderId}` });
     } finally {
         conn.release();
     }
