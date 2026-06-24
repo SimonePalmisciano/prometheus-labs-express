@@ -18,8 +18,6 @@ productsRouter.get('/category/:category', productsController.showProductsFiltere
 // endpoint per parametro filtro powertype
 productsRouter.get('/power/:power', productsController.showProductsFiltererdByPowerType);
 
-// endpoint per search param
-productsRouter.get('/:searchParam', productsController.ShowProductsBySearchString);
 
 productsRouter.get('/:slug', [checkProductSlugExists ,productsController.show]);
 
