@@ -1,5 +1,6 @@
 import connection from "../data/db.js";
 import queries from "../utils_js/queries/queries.js";
+import { sendUserEmail, sendAdminEmail } from "../utils_js/mailer/mailer.js";
 
 const {
     queryGetAllOrders,
@@ -29,7 +30,7 @@ const show = async (req, res) => {
 
 
         if (!order) {
-            return res.status(404).json({ error: `order wtih ID ${orderId} not found`});
+            return res.status(404).json({ error: `order wtih ID ${orderId} not found` });
         }
 
         const [items] = await connection.execute(queryGetOrderItems, [orderId]);
@@ -145,6 +146,9 @@ const store = async (req, res) => {
         }
 
         await conn.commit();
+        // invio email all'utente e all'admin dopo la creazione dell'ordine
+        await sendUserEmail({ guest_email, guest_name, total_amount });
+        await sendAdminEmail({ guest_name, guest_surname, guest_email, city, country, total_amount });
 
         return res.status(201).json({
             message: "Ordine creato con successo",
