@@ -5,4 +5,4 @@ function validateString(string) {
 
     return string.trim();
 }
-export default validateString
+export default validateString;
