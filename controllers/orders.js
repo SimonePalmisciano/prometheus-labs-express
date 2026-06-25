@@ -146,9 +146,11 @@ const store = async (req, res) => {
         }
 
         await conn.commit();
+
+        const orderData = { orderId, guest_email, guest_name, guest_surname, total_amount, address, house_number, country, city, phone_number, validatedItems };
         // invio email all'utente e all'admin dopo la creazione dell'ordine
-        await sendUserEmail({ guest_email, guest_name, total_amount });
-        await sendAdminEmail({ guest_name, guest_surname, guest_email, city, country, total_amount });
+        await sendUserEmail(orderData);
+        await sendAdminEmail(orderData);
 
         return res.status(201).json({
             message: "Ordine creato con successo",
