@@ -73,7 +73,7 @@ const generateTableRows = (items) => {
         const subtotal = item.quantity * item.price_at_purchase;
         return `
         <tr>
-            <td style="border: 1px solid #e2e8f0; padding: 12px 10px; text-align: left; color: #4a5568; font-size: 14px;">${item.product_id}</td>
+            <td style="border: 1px solid #e2e8f0; padding: 12px 10px; text-align: left; color: #4a5568; font-size: 14px;">${item.slug}</td>
             <td style="border: 1px solid #e2e8f0; padding: 12px 10px; text-align: center; color: #4a5568; font-size: 14px;">${item.quantity}</td>
             <td style="border: 1px solid #e2e8f0; padding: 12px 10px; text-align: right; color: #4a5568; font-size: 14px;">€${Number(item.price_at_purchase).toFixed(2)}</td>
             <td style="border: 1px solid #e2e8f0; padding: 12px 10px; text-align: right; color: #1a202c; font-weight: bold; font-size: 14px;">€${subtotal.toFixed(2)}</td>
