@@ -1,5 +1,6 @@
 // Configurazione Nodemailer per invio email 
 import nodemailer from 'nodemailer';
+import utils from "../utils.js";
 
 // oggetto che gestisce la connessione con il server email di Gmail
 const transporter = nodemailer.createTransport({
@@ -14,19 +15,7 @@ const transporter = nodemailer.createTransport({
 
 // Funzione per inviare email all'utente dopo l'ordine
 const sendUserEmail = async (orderData) => {
-    console.log("Dati ricevuti nel mailer:", orderData);
-
-    const tableRows = orderData.validatedItems.map(item => {
-        const subtotal = item.quantity * item.price_at_purchase;
-        return `
-        <tr key=${item.slug}>
-           <td style="border: 1px solid #e2e8f0; padding: 10px; text-align: left; color: #4a5568; font-size: 14px;">${item.slug}</td>
-        <td style="border: 1px solid #e2e8f0; padding: 10px; text-align: center; color: #4a5568; font-size: 14px;">${item.quantity}</td>
-        <td style="border: 1px solid #e2e8f0; padding: 10px; text-align: right; color: #4a5568; font-size: 14px;">€${Number(item.price_at_purchase).toFixed(2)}</td>
-        <td style="border: 1px solid #e2e8f0; padding: 10px; text-align: right; color: #1a202c; font-weight: bold; font-size: 14px;">€${subtotal.toFixed(2)}</td>
-        </tr>
-        `;
-    }).join('');
+    const tableRows = utils.generateTableRows(orderData.validatedItems);
 
     await transporter.sendMail({
         from: `"Prometheus Labs" <${process.env.MAIL_USER}>`,
@@ -117,18 +106,8 @@ const sendUserEmail = async (orderData) => {
 
 // Funzione per inviare email all'admmin dopo l'ordine
 const sendAdminEmail = async (orderData) => {
-    const tableRows = orderData.validatedItems.map(item => {
-        const subtotal = item.quantity * item.price_at_purchase;
-        return `
-        <tr>
-            <td>${item.product_id}</td>
-            <td>${item.quantity}</td>
-            <td>€${Number(item.price_at_purchase).toFixed(2)}</td>
-            <td>€${subtotal.toFixed(2)}</td>
-        </tr>
-        `;
-    }).join('');
-
+    const tableRows = utils.generateTableRows(orderData.validatedItems);
+    
     await transporter.sendMail({
         from: `"Prometheus Labs" <${process.env.MAIL_USER}>`,
         to: process.env.ADMIN_EMAIL,
