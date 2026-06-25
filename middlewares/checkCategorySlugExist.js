@@ -13,7 +13,7 @@ export async function checkCategorySlugExists(request, response, next) {
             result: null
         });
     }
-    const { result: rows, error } = await connection.execute(queries.querySelectCategoriesBySlug, [validatedCatSlug]); // cambiare con il nome della queries che cerca categorie per slug
+    const { result: rows, error } = await connection.execute(queries.querySelectCategoriesBySlug, [validatedCatSlug]);
 
     if (error === 404) {
         return response.status(404).json({
