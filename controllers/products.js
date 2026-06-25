@@ -204,8 +204,10 @@ const productsController = {
     show,
     showLatestTen,
     showBestsellers,
-    showProductsFilteredByCatName,
-    showProductsFilteredByPowerType
+
+    // alias temporanei per compatibilità con eventuali route già esistenti
+    showProductsFiltererdByCatName: showProductsFilteredByCatName,
+    showProductsFiltererdByPowerType: showProductsFilteredByPowerType
 };
 
 export default productsController;
