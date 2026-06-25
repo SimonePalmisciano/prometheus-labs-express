@@ -30,7 +30,6 @@ async function index(request, response) {
 async function show(request, response) {
     const { powerId } = request.params;
     const validatedId = validateNumber(powerId);
-    console.log("id val: ", powerId);
 
     try {
         const [results] = await connection.execute(queries.querySelectPowerById, [powerId]);
