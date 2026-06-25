@@ -17,7 +17,7 @@ export async function checkProductSlugExists(request, response, next) {
         const [rows] = await connection.query(queries.queryCheckIfProductBySlug, [validatedSlug]);
         if (rows.length === 0) {
             return response.status(404).json({
-                error: `Product with sug "${slug}" not found`,
+                error: `Product with slug "${slug}" not found`,
                 result: null
             });
         }
