@@ -1,8 +1,7 @@
-import express from 'express';
 import { Router } from 'express';
 import productsController from '../controllers/products.js';
 import { checkProductSlugExists } from '../middlewares/checkProductSlugExist.js';
-const productsRouter = express.Router();
+const productsRouter = Router();
 
 productsRouter.get('/', productsController.index);
 
