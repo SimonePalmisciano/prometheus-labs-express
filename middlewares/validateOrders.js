@@ -26,6 +26,13 @@ function validateOrders(request, response, next) {
         });
     }
 
+    // RegEx validazione email: controlla che la stringa segua il pattern "stringa@stringa.stringa"
+    // ^[^\s@]+ : inizia con uno o più caratteri che NON sono spazi o @
+    // @        : contiene il simbolo @
+    // [^\s@]+  : seguito da uno o più caratteri che NON sono spazi o @
+    // \.       : contiene un punto (.)
+    // [^\s@]+$ : termina con uno o più caratteri che NON sono spazi o @
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(guest_email.trim())) {
         return response.status(400).json({
@@ -54,6 +61,10 @@ function validateOrders(request, response, next) {
             result: null
         });
     }
+
+    // LA REGEX: pulisce il numero sostituendo con stringa vuota
+    // qualsiasi tipo di spazio , il trattino -, parentesi tonde (), il +
+    //  per tutte le occorrenze 
 
     const normalizedPhone = phone_number.replace(/[\s\-()+]/g, "");
     if (!/^\d+$/.test(normalizedPhone) || normalizedPhone.length < 6 || normalizedPhone.length > 15) {
