@@ -21,6 +21,14 @@ where p.slug = ?;
 // teniamo limit 1 per cintura di sicurezza
 const queryCheckIfProductBySlug = `SELECT name, slug FROM products WHERE slug = ? LIMIT 1`;
 
+// per le info minime di prodotto da passare in orderData
+const queryProductInfoForOrderData = `
+SELECT id, slug, price_full
+FROM products
+WHERE slug = ?
+LIMIT 1
+`;
+
 
 /* seleziona gli ultimi 10 prodotti per data di release (latest 5)
 ==== NILDE SAYS:===
@@ -166,6 +174,7 @@ const queries = {
     querySelectProductsByCategoryName,
     querySelectProductByPowerType,
     querySelectProductBySearchString,
+    queryProductInfoForOrderData,
 
     // Categories
     querySelectAllCategories,

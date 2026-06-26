@@ -9,43 +9,40 @@ const {
 } = queries;
 
 
-const index = async (req, res) => {
+const index = async (request, response) => {
     try {
         const [orders] = await connection.execute(queryGetAllOrders);
-        res.json(orders);
+        response.json(orders);
     } catch (error) {
-        console.error("Errore nel recupero degli ordini:", error);
-        res.status(500).json({ error: "Internal Server Error while getting order list" });
+        console.error("An error occurred while fetching orders in the database:", error);
+        response.status(500).json({ error: "Internal Server Error while getting order list" });
     }
 };
 
-const show = async (req, res) => {
-    const { orderId } = req.params;
-
+const show = async (request, response) => {
+    const { orderId } = request.params;
 
 
     try {
         const [[order]] = await connection.execute(queryGetOrderById, [orderId]);
-        console.log(order);
-
-
+  
         if (!order) {
-            return res.status(404).json({ error: `order wtih ID ${orderId} not found` });
+            return response.status(404).json({ error: `order wtih ID ${orderId} not found` });
         }
 
         const [items] = await connection.execute(queryGetOrderItems, [orderId]);
 
-        res.json({
+        response.json({
             ...order,
             items
         });
     } catch (error) {
         console.error(`Internal Server Error while looking for order witrh ID ${orderId}`, error.message);
-        res.status(500).json({ error: `Internal Server Error while looking with the order wtih ID ${orderId}` });
+        response.status(500).json({ error: `Internal Server Error while looking with the order wtih ID ${orderId}` });
     }
 };
 
-const store = async (req, res) => {
+const store = async (request, response) => {
     const {
         guest_email,
         guest_name,
@@ -57,7 +54,7 @@ const store = async (req, res) => {
         postal_code,
         country,
         items
-    } = req.body;
+    } = request.body;
 
     const conn = connection;
 
@@ -67,15 +64,13 @@ const store = async (req, res) => {
         const validatedItems = [];
         let total_amount = 0;
 
+        
         for (const item of items) {
             const slug = item.slug.trim();
             const quantity = Number(item.quantity);
 
             const [products] = await conn.execute(
-                `SELECT id, slug, price_full
-                FROM products
-                WHERE slug = ?
-                LIMIT 1`,
+                queries.queryProductInfoForOrderData,
                 [slug]
             );
 
@@ -152,7 +147,7 @@ const store = async (req, res) => {
         await sendUserEmail(orderData);
         await sendAdminEmail(orderData);
 
-        return res.status(201).json({
+        return response.status(201).json({
             message: "Ordine creato con successo",
             order_id: orderId,
             total_amount
@@ -162,7 +157,7 @@ const store = async (req, res) => {
 
         console.error("Errore nella creazione dell'ordine:", error);
 
-        return res.status(error.statusCode || 500).json({
+        return response.status(error.statusCode || 500).json({
             error: error.message || "Internal Server Error while getting the order"
         });
     }
