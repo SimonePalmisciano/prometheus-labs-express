@@ -25,7 +25,7 @@ const show = async (request, response) => {
 
     try {
         const [[order]] = await connection.execute(queryGetOrderById, [orderId]);
-  
+
         if (!order) {
             return response.status(404).json({ error: `order wtih ID ${orderId} not found` });
         }
@@ -61,26 +61,55 @@ const store = async (request, response) => {
     try {
         await conn.beginTransaction();
 
+
         const validatedItems = [];
         let total_amount = 0;
 
+        // mi restituisce array con slug di prodotto
+        const slugs = items.map(item => {
+            return item.slug.trim();
+        })
+        // sostituisce nella query dinamica gli slug
+        const placeholders = slugs.map(() => '?').join(',');
+
+        // mostra dettagli prodotto il cui slug è compreso nella lista degli slug
+        // ricavati in modo dinamico dalla map fatta sugli slug estratti da items
+        // NON può essere separata dalla def di placeholders generato dalla map!
+        const querySelectProductBySlugInItemsSlugs = `
+        SELECT id, slug, price_full FROM products WHERE slug IN (${placeholders})
+        `;
+
+        // INTERROGA DB con quetry dinamica costruita con il map
+        // mi serve qui e non in queries??
+        // INTANTO VEDIAMO SE FUNZION DOTTOR FRANKENSTEIN
+        const [products] = await conn.execute(
+            querySelectProductBySlugInItemsSlugs, // questa mi crea i placeholder del numero esatto degli slugs
+            slugs // devo fare si che tutti gli slug venano aggiunti come parametro [?, ?, ?]
+        );
+
+        // creare un oggetto per ciascun prodotto
+        // il for of associare slug a prodotto
+        const productLookup = {};
+        for (const p of products) {
+            productLookup[p.slug] = p;
+        }
+        console.log(productLookup);
         
+
         for (const item of items) {
             const slug = item.slug.trim();
             const quantity = Number(item.quantity);
 
-            const [products] = await conn.execute(
-                queries.queryProductInfoForOrderData,
-                [slug]
-            );
+            // cerchiamo nell'oggetto lookup la fetch che abbiamo gia fatto a priori
+            const product = productLookup[slug]; 
+            console.log(product);
 
-            if (products.length === 0) {
+            if (!product) {
                 const error = new Error(`Product with slug "${slug}" not found`);
                 error.statusCode = 404;
                 throw error;
             }
 
-            const product = products[0];
             const price_at_purchase = Number(product.price_full);
 
             total_amount += price_at_purchase * quantity;
