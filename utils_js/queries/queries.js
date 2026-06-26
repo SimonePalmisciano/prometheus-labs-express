@@ -163,6 +163,16 @@ JOIN products p ON p.id = op.product_id
 WHERE op.order_id = ?
 `;
 
+const queryDeleteOrderProductsByOrderId = `
+DELETE FROM order_products 
+WHERE order_id = ?;
+`;
+
+const queryDeleteOrderByOrderId = `
+DELETE FROM orders 
+WHERE id = ?;
+`;
+
 /*======== EXPORT ========*/
 
 const queries = {
@@ -176,6 +186,8 @@ const queries = {
     querySelectProductByPowerType,
     querySelectProductBySearchString,
     queryProductInfoForOrderData,
+    queryDeleteOrderProductsByOrderId,
+    queryDeleteOrderByOrderId,
 
     // Categories
     querySelectAllCategories,

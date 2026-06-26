@@ -200,8 +200,8 @@ const destroy = async (req, res) => {
     try {
         await conn.beginTransaction();
 
-        await conn.execute(`DELETE FROM order_products WHERE order_id = ?`, [orderId]);
-        const [result] = await conn.execute(`DELETE FROM orders WHERE id = ?`, [orderId]);
+        await conn.execute(queries.queryDeleteOrderProductsByOrderId, [orderId]);
+        const [result] = await conn.execute(queries.queryDeleteOrderByOrderId, [orderId]);
 
         await conn.commit();
 
@@ -209,10 +209,10 @@ const destroy = async (req, res) => {
             return res.status(404).json({ error: `order with ID ${orderId} not found` });
         }
 
-        res.json({ message: "Ordine eliminato con successo" });
+        res.json({ message: `Order with id ${orderId}successfully deleted from datatbase` });
     } catch (error) {
         await conn.rollback();
-        console.error("Errore nell'eliminazione dell'ordine:", error);
+        console.error(`An error occurred while deleting Order with id ${orderId} from datatbase`, error);
         res.status(500).json({ error: `Internal Server Error while deleting order with ID ${orderId}` });
     } finally {
         conn.release();
