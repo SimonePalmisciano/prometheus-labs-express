@@ -1,9 +1,9 @@
 function errorHandler(error, request, response, next) {
-    console.log(error)
+    const statusCode = error.statusCode || 500;
 
     response.status(500)
         .json({
-            error: error.message,
+            error: "Something went wrong. Please try again later",
             results: null
         })
 
