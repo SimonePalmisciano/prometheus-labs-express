@@ -1,9 +1,9 @@
-import express from 'express';
 import { Router } from 'express';
 import productsController from '../controllers/products.js';
 import { checkProductSlugExists } from '../middlewares/checkProductSlugExist.js';
-const productsRouter = express.Router();
+const productsRouter = Router();
 
+// index di products
 productsRouter.get('/', productsController.index);
 
 // endpoint custom per latest 10 products
@@ -18,7 +18,7 @@ productsRouter.get('/category/:category', productsController.showProductsFiltere
 // endpoint per parametro filtro powertype
 productsRouter.get('/power/:power', productsController.showProductsFiltererdByPowerType);
 
-
+// show by slug
 productsRouter.get('/:slug', [checkProductSlugExists ,productsController.show]);
 
 

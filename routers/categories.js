@@ -1,9 +1,8 @@
 import { Router } from "express";
-import express from "express";
 import categoriesController from "../controllers/categories.js";
 import { checkCategorySlugExists } from "../middlewares/checkCategorySlugExist.js";
 
-const categoriesRouter = express.Router();
+const categoriesRouter = Router();
 
 categoriesRouter.get("/", categoriesController.index);
 

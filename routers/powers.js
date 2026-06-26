@@ -1,8 +1,7 @@
 import { Router } from "express";
-import express from "express";
 import powersController from "../controllers/powers.js";
 
-const powersRouter = express.Router();
+const powersRouter = Router();
 
 powersRouter.get("/", powersController.index);
 
