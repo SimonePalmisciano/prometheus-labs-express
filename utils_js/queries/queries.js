@@ -96,8 +96,7 @@ INNER JOIN (
 ) product_totals ON product_totals.product_id = p.id
 LEFT JOIN powers po ON p.power_id = po.id
 ORDER BY total_quantity DESC
-LIMIT 15;
-`;
+LIMIT 10`;
 
 /* NON CANCELLARE - È GIA PRONTA PER POST MIGRAZIONE
  * VA SOLO SOSTITUITO 'BESTSELLERS' CON 'ICONIC'
