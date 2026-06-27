@@ -49,27 +49,54 @@ order by p.created_at DESC
 limit 10
 `;
 
-// mostra i primi 10  bestseller in ordine di numero di pezzi ordinati
-// select soliti dertttagli vari di prodotto
-// da prodotti
-// 
+
+/* mostra i primi 10  bestseller in ordine di numero di pezzi ordinati
+* CHI HA INSERITO I NUMERI COME STRINGA NELLE QUANTITY DEGLI ORDINI??? 
+* CHI????
+* CHI È STATO???
+*
+* Che fa sta query?
+* COME FUNZIONA QUESTA QUERY (PASSO DOPO PASSO):
+  * 1. TOTALI ISOLATI: Legge 'order_products' per calcolare le somme reali dei prodotti.
+  * L'uso di CAST(... AS SIGNED) garantisce che total_quantity sia un numero e non una stringa.
+  *
+  * 2. INNER JOIN: Unisce i prodotti con i totali appena calcolati.
+  * Esclude automaticamente i prodotti con 0 ordini.
+  *
+  * 3. LEFT JOIN POWERS: Collega i dati dei poteri (relazione 1:1, nessun duplicato).
+  *
+  * 4. CATEGORIE IN LINEA: Esegue una sottoquery interna usando GROUP_CONCAT().
+  * Unisce le categorie multiple in un'unica stringa (es: "bestseller,powershot").
+  *
+  * 5. CLASSIFICA E LIMIT: Ordina le righe uniche per quantità numerica (Dal più venduto in giù)
+  * e taglia il risultato ai primi 15.
+*/
+
 
 const querySelectBestsellerProducts = `
-select p.id, p.name, p.slug, SUM(op.quantity) as total_quantity, po.name as power, po.power_type, p.short_description as shortDescription, p.marketing_description as mktgDescription, c.name as category, p.price_full as price, p.ingredients, p.created_at as createdAt, p.updated_at as updatedAt,
-p.image_main_url as imgMain, p.image_lifestyle as imgLifestyle, p.image_ksp as imgKsp
-from products p
-left join order_products op on op.product_id = p.id
-left join powers po on p.power_id = po.id
-left join category_product cp on p.id = cp.product_id
-left join categories c on c.id = cp.category_id
-group by p.id, p.name, p.slug, po.name, po.power_type, 
-    p.short_description, p.marketing_description, 
-    c.name, p.price_full, p.ingredients, 
-    p.created_at, p.updated_at,
-    p.image_main_url, p.image_lifestyle, p.image_ksp
-order by total_quantity desc 
-limit 15;
-`;
+SELECT 
+    p.id, p.name, p.slug, 
+    COALESCE(product_totals.total_quantity, 0) AS total_quantity, 
+    po.name AS power, po.power_type, 
+    p.short_description AS shortDescription, p.marketing_description AS mktgDescription, 
+    (
+        SELECT GROUP_CONCAT(c.name) 
+        FROM category_product cp
+        JOIN categories c ON c.id = cp.category_id
+        WHERE cp.product_id = p.id
+    ) AS categories,
+    p.price_full AS price, p.ingredients, 
+    p.created_at AS createdAt, p.updated_at AS updatedAt,
+    p.image_main_url AS imgMain, p.image_lifestyle AS imgLifestyle, p.image_ksp AS imgKsp
+FROM products p
+INNER JOIN (
+    SELECT product_id, CAST(SUM(quantity) AS SIGNED) AS total_quantity
+    FROM order_products
+    GROUP BY product_id
+) product_totals ON product_totals.product_id = p.id
+LEFT JOIN powers po ON p.power_id = po.id
+ORDER BY total_quantity DESC
+LIMIT 10`;
 
 /* NON CANCELLARE - È GIA PRONTA PER POST MIGRAZIONE
  * VA SOLO SOSTITUITO 'BESTSELLERS' CON 'ICONIC'
