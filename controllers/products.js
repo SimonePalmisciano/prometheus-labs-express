@@ -5,7 +5,7 @@ import utils from "../utils_js/utils.js";
 async function index(request, response) {
 
     try {
-        const { search } = request.query;
+        const { search, category } = request.query;
         let rows = [];
 
         if (search) {
@@ -29,6 +29,34 @@ async function index(request, response) {
                     error: 'No product available in the database'
                 });
         }
+
+        // filtro category
+        if (category) {
+            // mi creo array con categorie
+            const targetCategories = category.split(',').map(cat => cat.trim().toLowerCase());
+
+            rows = rows.filter(row => {
+                // stiamo lavorando prima della groupBy quindi la category è ancora una voce singola
+                if (row.category) {
+                    const productCategoryLower = row.category.toLowerCase();
+                    
+                    // Controlliamo se la categoria del prodotto è inclusa tra quelle scelte
+                    return targetCategories.includes(productCategoryLower);
+                }
+                return false;
+            });
+
+            if (rows.length === 0) {
+                return response.status(404)
+                    .json({
+                        result: [],
+                        error: `No products found for category: ${category}`
+                    });
+            }
+
+        }
+
+        // faccio la groupby sulle righe filtrate
 
         const groupedRows = utils.groupBy(rows);
 
