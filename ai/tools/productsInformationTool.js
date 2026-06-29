@@ -1,6 +1,6 @@
-import { z } from "zod";
 import { tool } from "langchain";
-import { connection } from "../../data/db.js";
+import { z } from "zod";
+import connection from "../../data/db.js";
 import queries from "../../utils_js/queries/queries.js"
 
 async function fetchProductInformation() {
