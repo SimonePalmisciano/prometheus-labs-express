@@ -8,6 +8,7 @@ import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import ordersRouter from "./routers/orders.js";
 import validateOrders from "./middlewares/validateOrders.js";
+import newsletterRouter from "./routers/newsletter.js";
 
 const port = process.env.SERVER_PORT || 3000;
 
@@ -22,6 +23,7 @@ app.use("/categories", categoriesRouter);
 app.use("/powers", powersRouter);
 app.use("/products", productsRouter);
 app.use("/orders", [validateOrders, ordersRouter]);
+app.use("/newsletter", newsletterRouter);
 app.use('/aiagent', aichatRouter);
 
 app.get("/", (request, response) => {
