@@ -1,5 +1,5 @@
 import { createAgent } from "langchain";
-import { model } from "../models/anthropic.js";
+import model from "../models/anthropic.js";
 import { productsInformationTool } from "../tools/productsInformationTool.js";
 
 // inserire eventuale import tool
@@ -90,6 +90,7 @@ Do not answer questions about:
 - medicine unrelated to PrometheusLabs products
 - legal or financial advice
 - any other unrelated topic.
+
     `,
     model,
     tools: [
