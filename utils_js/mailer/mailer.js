@@ -202,4 +202,40 @@ const sendAdminEmail = async (orderData) => {
     }
 };
 
-export { transporter, sendUserEmail, sendAdminEmail };
+// Funzione per inviare email di conferma iscrizione newsletter
+const sendNewsletterEmail = async (email) => {
+    try {
+        await transporter.sendMail({
+            from: `"Prometheus Labs" <${process.env.MAIL_USER}>`,
+            to: email,
+            subject: 'Welcome to Prometheus Labs Newsletter! 🧬',
+            html: `
+        <div style="font-family: 'Segoe UI', Arial, sans-serif; color: #2d3748; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px;">
+            
+            <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #edf2f7;">
+                <h1 style="margin: 0 0 5px 0; font-size: 26px; color: #1a202c; font-weight: 700;">Welcome to Prometheus Labs! 🧬</h1>
+                <h2 style="color: #e67e22; margin: 0; font-size: 18px; letter-spacing: 2px; font-weight: 800;">YOU ARE NOW PART OF THE ELITE</h2>
+            </div>
+            
+            <p style="font-size: 16px; color: #4a5568; line-height: 1.5; margin-bottom: 25px;">
+                Thank you for subscribing to our newsletter! You will be the first to know about new superpowers, exclusive offers and latest discoveries from our laboratories.
+            </p>
+            
+            <div style="font-size: 15px; font-style: italic; color: #4a5568; background-color: #fffaf0; border-left: 4px solid #e67e22; padding: 16px; margin-bottom: 30px; border-radius: 0 8px 8px 0; line-height: 1.6;">
+                <strong style="color: #dd6b20; font-size: 16px; display: block; margin-bottom: 5px; font-style: normal;">The future belongs to the extraordinary. ⚡</strong>
+                Stay tuned for the latest innovations from Prometheus Labs.
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #edf2f7; font-size: 13px; color: #a0aec0;">
+                <p style="margin: 0; font-weight: 600; color: #4a5568;">Prometheus Labs Team</p>
+                <p style="margin: 5px 0 0 0;">Next-Gen Bio-Enhancements</p>
+            </div>
+        </div>
+        `
+        });
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export { transporter, sendUserEmail, sendAdminEmail, sendNewsletterEmail };
