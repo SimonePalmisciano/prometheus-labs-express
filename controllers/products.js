@@ -32,10 +32,16 @@ async function index(request, response) {
 
         // filtro category
         if (category) {
+            // mi creo array con categorie
+            const targetCategories = category.split(',').map(cat => cat.trim().toLowerCase());
+
             rows = rows.filter(row => {
                 // stiamo lavorando prima della groupBy quindi la category è ancora una voce singola
                 if (row.category) {
-                    return row.category.toLowerCase() === category.toLowerCase();
+                    const productCategoryLower = row.category.toLowerCase();
+                    
+                    // Controlliamo se la categoria del prodotto è inclusa tra quelle scelte
+                    return targetCategories.includes(productCategoryLower);
                 }
                 return false;
             });
