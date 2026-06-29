@@ -3,6 +3,7 @@ import cors from "cors";
 import categoriesRouter from "./routers/categories.js";
 import powersRouter from "./routers/powers.js";
 import productsRouter from "./routers/products.js";
+import aichatRouter from "./routers/aiagent.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import ordersRouter from "./routers/orders.js";
@@ -21,6 +22,7 @@ app.use("/categories", categoriesRouter);
 app.use("/powers", powersRouter);
 app.use("/products", productsRouter);
 app.use("/orders", [validateOrders, ordersRouter]);
+app.use('/aiagent', aichatRouter);
 
 app.get("/", (request, response) => {
     response.json({
