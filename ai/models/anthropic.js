@@ -5,6 +5,6 @@ const model = new ChatAnthropic({
     apiKey: process.env.CLAUDE_API_KEY
 })
 
-export default { model };
+export default  model;
 
 
