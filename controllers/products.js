@@ -30,23 +30,28 @@ async function index(request, response) {
                 });
         }
 
+        // faccio la groupby sulle righe filtrate
+
+        let groupedRows = utils.groupBy(rows);
+
+
         // filtro category
         if (category) {
             // mi creo array con categorie
             const targetCategories = category.split(',').map(cat => cat.trim().toLowerCase());
 
-            rows = rows.filter(row => {
-                // stiamo lavorando prima della groupBy quindi la category è ancora una voce singola
-                if (row.category) {
-                    const productCategoryLower = row.category.toLowerCase();
-                    
-                    // Controlliamo se la categoria del prodotto è inclusa tra quelle scelte
-                    return targetCategories.includes(productCategoryLower);
+            groupedRows = groupedRows.filter(product => {
+                // check che 'categories' sia il nome dell'array generato dalla groupBy
+                if (product.categories && Array.isArray(product.categories)) {
+                    // check se ALMENO una delle categorie del prodotto è inclusa in quelle cercate
+                    return product.categories.some(prodCat =>
+                        targetCategories.includes(prodCat.toLowerCase())
+                    );
                 }
                 return false;
             });
 
-            if (rows.length === 0) {
+            if (groupedRows.length === 0) {
                 return response.status(404)
                     .json({
                         result: [],
@@ -55,10 +60,6 @@ async function index(request, response) {
             }
 
         }
-
-        // faccio la groupby sulle righe filtrate
-
-        const groupedRows = utils.groupBy(rows);
 
         return response.status(200)
             .json({
